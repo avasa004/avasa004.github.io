@@ -1,0 +1,54 @@
+.images{
+	display:inline;
+}
+
+.ImageArea{
+	
+   position: absolute;
+   left: 200px;
+   bottom: 200px;
+   border: 1px solid #000;
+   height: 300px;
+   width: 500px;
+	}
+
+.together{
+	display: inline;
+}
+
+.Info{
+	text-align: right;
+}
+
+h1 {
+   font-size: 20px;
+   position: absolute;
+   left: 750px;
+   bottom: 450px;
+   font-weight: bold;
+}
+
+h2 {
+   font-size: 20px;
+   position: absolute;
+   left: 750px;
+   bottom: 400px;
+   font-weight: bold;
+   }
+
+h3 {
+   font-size: 20px;
+   position: absolute;
+   left: 750px;
+   bottom: 420px;
+   font-weight: bold;
+}
+
+h4 {
+   font-size: 20px;
+   position: absolute;
+   left: 720px;
+   bottom: 300px;
+   right:15px;
+   font-weight: bold;
+}

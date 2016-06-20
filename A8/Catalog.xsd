@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.cs.umn.edu/4131/ns/catalog"
+ 	targetNamespace="http://www.cs.umn.edu/4131/ns/catalog"
+ 	elementFormDefault="qualified">
+
+ <xsd:element name="courseCatalog" type="CourseListType"/>
+ <xsd:complexType name="CourseListType">
+ 	<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+ 		<xsd:element name="course" type="CourseType">
+ 		</xsd:element>
+ 	</xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="CourseType">
+ 	<xsd:sequence>
+ 		
+ 		<xsd:element name="title">
+ 			<xsd:simpleType>
+	 			<xsd:restriction base="xsd:string">
+	 				<xsd:maxLength value="50"/>
+	 			</xsd:restriction>
+	 		</xsd:simpleType>
+ 		</xsd:element>
+
+ 		<xsd:element name="instructor" type="InstructorType" minOccurs="1" maxOccurs="3"/>
+		<xsd:element name="number" type="CourseNumberType" minOccurs="1" maxOccurs="1"/>
+		<xsd:element name="schedule" type="ScheduleType" minOccurs="1" maxOccurs="1"/>
+		<xsd:element name="semester" type="SemesterType" minOccurs="1" maxOccurs="1"/>
+		<xsd:element name="enrollment" type="EnrollmentType" minOccurs="1" maxOccurs="1"/>
+
+ 	</xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="InstructorType">
+ 	<xsd:sequence>
+ 		<xsd:element name="firstname" type="xsd:string"/>
+ 		<xsd:element name="lastname" type="xsd:string"/>
+ 	</xsd:sequence>
+ 	<xsd:attribute name="title" type="PersonTitleType" use="optional"/>
+</xsd:complexType>
+
+ <xsd:simpleType name="PersonTitleType">
+ 	<xsd:restriction base="xsd:string">
+ 		<xsd:enumeration value="Dr"/>
+ 		<xsd:enumeration value="Prof"/>
+ 	</xsd:restriction>
+ </xsd:simpleType>
+
+ <xsd:simpleType name="CourseNumberType">
+ 	<xsd:restriction base="xsd:string">
+ 		<xsd:pattern value="[a-zA-z]{2}[0-9]{4}"/>
+ 	</xsd:restriction>
+ </xsd:simpleType>
+
+ <xsd:simpleType name="SemesterType">
+ 	<xsd:restriction base="xsd:string">
+ 		<xsd:enumeration value="Fall"/>
+ 		<xsd:enumeration value="Spring"/>
+ 		<xsd:enumeration value="Summer"/>
+ 	</xsd:restriction>
+ </xsd:simpleType>
+
+ <xsd:simpleType name="LectureHourType">
+ 	<xsd:restriction base="xsd:string">
+ 		<xsd:pattern value="[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}"/>
+ 	</xsd:restriction>
+ </xsd:simpleType>
+
+ <xsd:complexType name="ScheduleType">
+ 	<xsd:sequence>
+ 		<xsd:element name="lecture" type="DayTimeType" minOccurs="1" maxOccurs="3"/>
+ 	</xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="DayTimeType">
+ 	<xsd:simpleContent>
+	 	<xsd:extension base="LectureHourType">
+	 		<xsd:attribute name="day" type="WeekdayType"/>
+	 	</xsd:extension>
+	 </xsd:simpleContent>
+ </xsd:complexType>
+
+ <xsd:simpleType name="WeekdayType">
+ 	<xsd:restriction base="xsd:string">
+ 		<xsd:enumeration value="Mon"/>
+ 		<xsd:enumeration value="Tue"/>
+ 		<xsd:enumeration value="Wed"/>
+ 		<xsd:enumeration value="Thu"/>
+ 		<xsd:enumeration value="Fri"/>
+ 	</xsd:restriction>
+ </xsd:simpleType>
+
+ <xsd:simpleType name="EnrollmentType">
+ 	<xsd:restriction base="xsd:integer">
+ 		<xsd:minInclusive value="10"/>
+ 		<xsd:maxInclusive value="100"/>
+ 	</xsd:restriction>
+ </xsd:simpleType>
+
+
+</xsd:schema>

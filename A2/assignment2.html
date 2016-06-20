@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  	<meta charset = "UTF-8">
+    <link rel="stylesheet" type="text/css" href="assignment2.css">
+    <title>
+      CSCI 4131 Assignment 2
+    </title>
+  </head>
+  <body onload = "init()">
+    <button id = "start" onClick="start()">Start</button>
+    <button id = "next" onClick="next()">Next</button>
+    <button id = "prev" onClick="previous()">Previous</button>
+    
+    Select Information Type:
+    <select id = "sel" onChange = "showInfo(currentImageId)">
+      <option value = "None">None</option>
+      <option value = "Arch">Architect</option>
+      <option value = "Year">Year</option>
+      <option value = "Desc">Description</option>
+    </select>
+    <br><br>
+    
+    <div class="images">
+      <img id = "armo" src = "armory.jpg"  alt = "Armory Building" onClick = "displayMe(0)" height="50" width="50">
+      <img id = "pill" src = "pillsbury.jpg" onClick = "displayMe(1)" alt = "Pillsbury Building" height="50" width="50">
+      <img id = "folw" src = "folwell.jpg" onClick = "displayMe(2)" alt = "Folwell Building" height="50" width="50">
+      <img id = "jone" src = "jones.jpg" onClick = "displayMe(3)" alt = "Jones Building" height="50" width="50">
+      <img id = "stat" src = "statue.jpg" onClick = "displayMe(4)" alt = "Pillsbury Statue" height="50" width="50">
+      <img id = "wesb" src = "wesbrook.jpg" onClick = "displayMe(5)" alt = "Wesbrook Building" height="50" width="50">
+      <img id = "nich" src = "nicholson.jpg" onClick = "displayMe(6)" alt = "Nicholson Hall" height="50" width="50">
+      <img id = "eddy" src = "eddy.jpg" onClick = "displayMe(7)" alt = "Eddy Building" height="50" width="50">
+      <img id = "musi" src = "music.jpg" onClick = "displayMe(8)" alt = "Music Education Building" height="50" width="50">
+      <img id = "wull" src = "wulling.jpg" onClick = "displayMe(9)" alt = "Wulling Building" height="50" width="50">
+    </div>
+
+    <hr>
+    <button onClick="startShow()">Start Slide Show</button>
+    <button onClick="stopShow()()">Stop Slide Show</button>
+    <br><br>
+
+    Slow<input type = "range" id = "slider" min = "0" max = "10">Fast
+      
+      <div id = "image" class = "ImageArea" style="width:500px;height:300px;border:1px solid #000;">
+		<img id = 'slides' height=300 width=500 >
+      </div>
+
+      <h1>Image Information:</h1>
+     <div id = "info" class = "Info">
+     </div>
+      <!-- <h4 id = "debug"></h4> -->
+
+     <script>
+     	var currentImageId = 0;
+      	var manual = false;
+		var images = new Array(10);
+		var show = false;
+		var curopacity = 1;
+
+		var srcs = ["armory.jpg","pillsbury.jpg","folwell.jpg","jones.jpg","statue.jpg","wesbrook.jpg","nicholson.jpg","eddy.jpg","music.jpg","wulling.jpg"];
+
+		var builds=["Armory Building", "Pillsbury Hall", "Folwell Hall", "Jones Hall", "Pillsbury Statue",
+			"Wesbrook Hall", "Nicholson Hall", "Eddy Hall", "Music Education",
+            "Wulling Hall"];
+
+		var ids = ["armo","pill","folw","jone","stat","wesb","nich","eddy","musi","wull"];
+		var years = ["1896","1889","1907","1901","1900","1898","1890","1886","1888","1892"];        
+
+		var archs=["Charles Aldrich","Leroy Buffington with Harvey Ellis", "Clarence H. Johnston, Sr","Charles Aldrich",
+			"Daniel C. French, sculptor","Frederick Corser",
+            "LeRoy Buffington with Harvey Ellis","LeRoy Buffington","Warren H. Hayes", "Allen Stem and Charles Reed"];
+
+		var descs = ["Built for athletics and military drill, as well as performing arts and social activities. Memorial plaques at the front entrance honor students, faculty, and alumni who fought in the Spanish-American War.",
+		    "Built as Science Hall. Named for Governor John S. Pillsbury.",
+		    "When Old Main burned in 1904, Folwell Hall was built to house displaced departments. Named for William Watts Folwell, first president of the University, 1869-84.",
+		    "Built as Physics Building. Named for Frederick S. Jones, professor of physics and dean of the College of Engineering.",
+		    "Pillsbury statue located across the street from Burton Hall.",
+		    "Built as Laboratory of Medical Science. In 1912, dentistry moved here. Named for Frank Wesbrook, professor of pathology and bacteriology and dean of the College of Medicine and Surgery.",
+		    "Built as chemical laboratory. In 1914, chemistry moved to the mall area and Nicholson was remodeled for the men's union until Coffman Memorial Union was built as a coed student union. Named for Edward E. Nicholson, professor of chemistry and later dean of Student Affairs. ",
+		    "Built as Mechanic Arts. It is the oldest existing building on campus. Named for Henry Turner Eddy, professor of engineering and mathematics and dean of the Graduate School.",
+		    "Built as Student Christian Association building. Acquired by the University, it housed Child Welfare and Music Education.",
+		    "Built as Medical Hall; named Millard Hall in 1906. Fire damaged the building. It later became the site for the pharmacy building. Named for Frederick J. Wulling, first dean and founder of the College of Pharmacy."];
+      
+		
+
+		function init(){
+			for (var i = 0; i<10; i++) {
+					images[i] = new Object();
+			}
+			for(i=0;i<10;i++){
+				images[i].id = ids[i];
+				images[i].src = srcs[i];
+				images[i].build = builds[i];
+				images[i].arch = archs[i];
+				images[i].year = years[i];
+				images[i].desc = descs[i];
+			}
+		}
+
+
+		function start(){
+			manual = true;
+			show = false;
+			displayImage(0);
+			showInfo(0);
+			setBorder(images[0].id);
+			currentImageId = 0;
+		}
+
+		
+
+		function displayImage(id){
+			document.getElementById("slides").src = images[id].src;
+		}
+
+		
+
+		function showInfo(id){
+		   if(manual == true || show == true){
+				var sel = document.getElementById("sel");
+		  		var value = sel.options[sel.selectedIndex].value;
+
+		  		document.getElementById("info").innerHTML = "<h3>Building: "+images[id].build+"</h3>";
+		  if(value == "Arch") document.getElementById("info").innerHTML = "<h2>Architect: "+images[id].arch+"</h2><h3>Building: "+images[id].build+"</h3>";
+		  if(value == "Year") document.getElementById("info").innerHTML = "<h2>Year: "+images[id].year+"</h2><h3>Building: "+images[id].build+"</h3>";
+      	  if(value == "Desc") document.getElementById("info").innerHTML = "<h4>Description: "+images[id].desc+"</h4><h3>Building: "+images[id].build+"</h3>";
+
+			}
+		}
+
+		
+
+		function setBorder(id){
+			clearOtherBorders(id);
+			document.getElementById(id).style.borderStyle = "solid";
+			document.getElementById(id).style.borderColor = "red";
+		}
+
+		
+
+		function clearOtherBorders(id){
+			for(i=0;i<10;i++){
+				if(images[i].id != id){
+					document.getElementById(images[i].id).style.borderStyle = "none";
+				}
+			}
+		}
+
+		
+
+		function next(){
+			currentImageId = currentImageId+1;
+			if(currentImageId == 10) currentImageId = 0;
+			
+			displayImage(currentImageId);
+			showInfo(currentImageId);
+			setBorder(images[currentImageId].id);
+		}
+
+		
+
+		function previous(){
+			currentImageId = currentImageId-1;
+			if(currentImageId == -1) currentImageId = 9;
+			displayImage(currentImageId);
+			showInfo(currentImageId);
+			setBorder(images[currentImageId].id);
+			
+		}
+
+		
+
+		function startShow(){
+			currentImageId = -1;
+			if(show == true) {window.alert("Slide Show already in progress");}
+			else{
+				show = true;
+				document.getElementById("start").disabled=true;
+      			document.getElementById("next").disabled=true;
+      			document.getElementById("prev").disabled=true;
+      			document.getElementById("slides").style.opacity = 0;
+      			fadeIn();}
+		}
+
+		
+
+		function fadeOut(){
+			if(show == true){
+			speed = document.getElementById("slider").value;
+			if(speed == 0) speed = 600;
+			if(speed == 1) speed = 550;
+			if(speed == 2) speed = 500;
+			if(speed == 3) speed = 450;
+			if(speed == 4) speed = 400;
+			if(speed == 5) speed = 350;
+			if(speed == 6) speed = 300;
+			if(speed == 7) speed = 250;
+			if(speed == 8) speed = 200;
+			if(speed == 9) speed = 150;
+			if(speed == 10) speed = 100;
+			dec = window.setInterval("decreaseOpacity()",speed);
+			}
+		}
+
+		
+
+		function fadeIn(){
+			if(show == true){
+			speed = document.getElementById("slider").value;
+			if(speed == 0) speed = 600;
+			if(speed == 1) speed = 550;
+			if(speed == 2) speed = 500;
+			if(speed == 3) speed = 450;
+			if(speed == 4) speed = 400;
+			if(speed == 5) speed = 350;
+			if(speed == 6) speed = 300;
+			if(speed == 7) speed = 250;
+			if(speed == 8) speed = 200;
+			if(speed == 9) speed = 150;
+			if(speed == 10) speed = 100;
+			currentImageId +=1
+			if(currentImageId == 10) currentImageId = 0;
+		
+
+			displayImage(currentImageId);
+			showInfo(currentImageId);
+			setBorder(images[currentImageId].id);
+			inc = window.setInterval("increaseOpacity()",speed);}
+			
+		}
+
+		
+
+		function increaseOpacity(){
+			document.getElementById("slides").style.opacity = curopacity + 0.1;
+			curopacity += 0.1
+			if(curopacity >= 1){
+			 window.clearInterval(inc);
+				fadeOut();
+				}
+
+		}
+
+		
+
+		function decreaseOpacity(){
+			
+			document.getElementById("slides").style.opacity = curopacity - 0.1;
+			curopacity -= 0.1;
+	
+			if(curopacity <= 0)
+			{	
+				window.clearInterval(dec);
+				fadeIn();
+			}
+		}
+
+
+		
+
+		function stopShow(){
+			if(show!=true) window.alert("No slideshow started");
+			show = false;
+			document.getElementById("start").disabled=false;
+      		document.getElementById("next").disabled=false;
+      		document.getElementById("prev").disabled=false
+      		manual = true;
+		}
+
+		
+
+		function displayMe(id){  
+			if(manual == true){
+			currentImageId = id;
+			displayImage(id);
+			setBorder(images[id].id);
+			showInfo(id);
+			}
+		}
+
+
+	</script>	
+
+	</body>
+</html>
+
+

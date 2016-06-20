@@ -1,0 +1,7 @@
+The following errors are encountered while validating the html:
+
+image attribute src was empty. This is because we had to display an empty box without any image in it and later fill that box with the images. I used the img tag to create the box but initially, there is no src to be loaded into that box, hence that error.
+
+image attribute alt missing. This is again due the fact that we had to load an empty box. Specifying the alt attribute would have displayed the text in the box, as src is empty initially.
+
+The web page works fine otherwise. 

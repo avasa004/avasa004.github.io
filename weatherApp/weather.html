@@ -1,0 +1,77 @@
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+
+	<link rel='stylesheet' href='w3.css'>
+	<link href='https://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Merriweather|Poiret+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Merriweather:700|Poiret+One|Slabo+27px' rel='stylesheet' type='text/css'>
+	<title>WeatherApp</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+</head>
+<body>
+	<img src='weather-background-5.jpg' alt='background' style='width:100%; height: auto;'>  
+	<p>
+
+		<input class='w3-input' id='input' type='text' placeholder="Please Enter A City Name"></p>
+		<div class='w3-row'>
+			<div class='w3-half w3-container'>
+				<button class='w3-btn w3-hover-grey' onclick='makeRequest();'>Get Info</button>
+			</div>
+		</div>
+		<br/>
+		<br/>
+		<br/>
+		<div id='response' height='500px'>
+		<div class='w3-xxlarge w3-center w3-myfontmerri' id = 'heading'>
+		</div>
+		<div class='w3-center w3-myfontslabo w3-xlarge' id='weatherInfo'>
+		</div>
+		</div>
+	</form>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script>
+
+		function makeRequest(){
+
+			if(document.getElementById('input').value.length == 0){
+				document.getElementById('input').style = 'border:3px solid #ff0000;';
+			}
+
+			else{
+
+				city = document.getElementById('input').value;
+				$.ajax({
+					url : "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=ed283c5e3e12c4532180d23c5f298062",
+					dataType : "jsonp",
+					success : function(parsed_json) {
+						placeData(parsed_json);
+
+					}
+				});
+			}
+		}
+
+		function placeData(parsed_json){
+			var tempKelvin = parseInt(parsed_json['main']['temp']);
+			var tempMinKelvin = parseInt(parsed_json['main']['temp_min']);
+			var tempMaxKelvin = parseInt(parsed_json['main']['temp_max']);
+			var tempCelsius = tempKelvin - 273;
+			var tempMinCelsius = tempMinKelvin - 273;
+			var tempMaxCelsius = tempMaxKelvin - 273;
+			$("#heading").html(city+"," + parsed_json['sys']['country']);//'Weather In ' + city +  ': ' + tempCelsius + ' &#8451;';
+			document.getElementById('heading').innerHTML += "<hr>";
+			document.getElementById('weatherInfo').innerHTML = "Current Temperature is " + tempCelsius + ' &#8451; ' + 'and ' + parsed_json['weather'][0]['description'] + "<br/>";
+			document.getElementById('weatherInfo').innerHTML += "Minimum Temperature: " + tempMinCelsius + ' &#8451; ' + "<br/>";
+			document.getElementById('weatherInfo').innerHTML += "Maximum Temperature: " + tempMaxCelsius + ' &#8451; ' + "<br/>";
+			document.getElementById('weatherInfo').innerHTML += "Pressure: " + parsed_json['main']['pressure'] + " hPa" + "<br/>";
+			document.getElementById('weatherInfo').innerHTML += "Humidity: " + parsed_json['main']['humidity'] + "%" + "<br/>";
+			$('html, body').animate({
+				scrollTop: $("#response").offset().top
+			}, 2000);
+		}
+
+	</script>
+</body>
+</html>
